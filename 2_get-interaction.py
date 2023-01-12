@@ -63,7 +63,7 @@ def get_oneway(relations, gene1, gene2):
                 relations.append([gene1[i], gene2[j]])
     return relations
 
-def loop_relation(filename):
+def loop_relation_max_interaction(filename):
     with open(filename) as htmlfile:    
         soup = BeautifulSoup(htmlfile, 'html.parser')
         
@@ -126,6 +126,74 @@ def loop_relation(filename):
 
     return set_relations, namepath
 
+def loop_relation_min_interaction(filename):
+    with open(filename) as htmlfile:    
+        soup = BeautifulSoup(htmlfile, 'html.parser')
+        
+        relations = list()
+        namepath = soup.find("pathway").get("title").split(" signaling")[0]
+
+        for relation in soup.find_all("relation"):
+            
+            entry1 = relation.get("entry1") # id de l'élément 1 de la relation
+            entry2 = relation.get("entry2") # id de l'élément 2 de la relation
+
+            name1 = soup.find("entry", id=entry1).get("name").split()[0] # nom de l'élément 1 de la relation
+            name2 = soup.find("entry", id=entry2).get("name").split()[0] # nom de l'élément 2 de la relation
+
+            type1 = soup.find("entry", id=entry1).get("type") # type de l'élément de la relation 1
+            type2 = soup.find("entry", id=entry2).get("type") # type de l'élément de la relation 2
+
+            try:
+                if "binding" in relation.find("subtype").get("name") or "state change" in relation.find("subtype").get("name"):
+                    # si le type de la relation est une assocition : il faut faire 1 -> 2 et 2 -> 1
+                    if test_type(type1, type2) == 0:                                # SI PAS DE GROUPE !
+                        relations.append([name1, name2])
+                        relations.append([name2, name1])
+                        # print("c le zero")
+                    elif test_type(type1, type2) == 1:                              # SI GROUPE POUR 1 !
+                        for element1 in soup.find("entry", id=entry1).find_all("component"):
+                            name1 = soup.find("entry", id=element1.get("id")).get("name")[0]
+                            relations.append([name1, name2])
+                            relations.append([name2, name1])
+
+                    elif test_type(type1, type2) == 2:                              # SI GROUPE POUR 2 !
+                        for element2 in soup.find("entry", id=entry2).find_all("component"):
+                            name2 = soup.find("entry", id=element2.get("id")).get("name")[0]
+                            relations.append([name1, name2])
+                            relations.append([name2, name1])
+                    elif test_type(type1, type2) == 3:                              # SI GROUPE POUR LES DEUX ! 
+                        for element1 in soup.find("entry", id=entry1).find_all("component"):
+                            name1 = soup.find("entry", id=element1.get("id")).get("name")[0]
+                            for element2 in soup.find("entry", id=entry2).find_all("component"):
+                                name2 = soup.find("entry", id=element2.get("id")).get("name")[0]
+                                relations.append([name1, name2])
+                                relations.append([name2, name1])
+                else: # si le type de la relation n'est une assocition : sens unilatéral !
+                    if test_type(type1, type2) == 0:                                # SI PAS DE GROUPE !
+                        relations.append([name1, name2])
+                    elif test_type(type1, type2) == 1:                              # SI GROUPE POUR 1 !
+                        for element1 in soup.find("entry", id=entry1).find_all("component"):
+                            name1 = soup.find("entry", id=element1.get("id")).get("name")[0]
+                            relations.append([name1, name2])
+                    elif test_type(type1, type2) == 2:                              # SI GROUPE POUR 2 !
+                        for element2 in soup.find("entry", id=entry2).find_all("component"):
+                            name2 = soup.find("entry", id=element2.get("id")).get("name")[0]
+                            relations.append([name1, name2])
+                    elif test_type(type1, type2) == 3:                              # SI GROUPE POUR LES DEUX ! 
+                        for element1 in soup.find("entry", id=entry1).find_all("component"):
+                            name1 = soup.find("entry", id=element1.get("id")).get("name")[0]
+                            for element2 in soup.find("entry", id=entry2).find_all("component"):
+                                name2 = soup.find("entry", id=element2.get("id")).get("name")[0]
+                                relations.append([name1, name2])
+                # print(relations)
+            except AttributeError or ImportError:
+                pass
+    # supprimer les doublons
+    set_relations = []
+    [set_relations.append(x) for x in relations if x not in set_relations]  
+
+    return set_relations, namepath
 
 def linear(gene):
     if type(gene) == list:
@@ -133,7 +201,7 @@ def linear(gene):
     return gene
 
 def write_csv_file(dict_relations):
-    spamwriter = csv.writer(open("p-interactions-kegg.csv", "w"), delimiter=';', quoting=csv.QUOTE_NONE, quotechar='"', escapechar='')
+    spamwriter = csv.writer(open("p-interactions-kegg-test.csv", "w"), delimiter=';', quoting=csv.QUOTE_NONE, quotechar='"', escapechar='')
     fields = ["pathway","interact1_hsa","interact2_hsa"]
     spamwriter.writerow(fields)
     for pathname, relations in dict_relations.items():
@@ -154,7 +222,7 @@ if __name__ == "__main__":
     for f in glob.glob("paths/*"):
         print(f)
 
-        dico_relation, pathname = loop_relation(filename=f)
+        # dico_relation, pathname = loop_relation_max_interaction(filename=f)
+        dico_relation, pathname = loop_relation_min_interaction(filename=f)
         dico_paths[pathname] = dico_relation
-
     write_csv_file(dict_relations=dico_paths)
