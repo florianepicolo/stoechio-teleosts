@@ -15,10 +15,9 @@ def recover_missing_ensembl_id(kegg_id):
             return text
     return False
 
-def get_corr_kegg_ENS():
+def get_corr_kegg_ENS(infosfile):
     dico_corr = dict()
-    # with open("g-ENSvsNCBI-humangenes.txt") as corrfile:
-    with open("g-infos-biomart.csv") as corrfile:
+    with open(infosfile) as corrfile:
 
         # fichier récupérer en faisant une recherche biomart des id ENS -> id NCBI (kegg = hsa:'+ id NCBI')
         for row in corrfile:
@@ -30,9 +29,9 @@ def get_corr_kegg_ENS():
 
     return dico_corr
 
-def create_file_interact_ensembl(dict_corr):
-    with open("p-interactions-kegg.csv") as interact : 
-        spamwriter = csv.writer(open("p-interactions-ensembl.csv", "w"), delimiter=';', quoting=csv.QUOTE_NONE, quotechar='"', escapechar='')
+def create_file_interact_ensembl(dict_corr, keggfile, interactfile):
+    with open(keggfile) as interact : 
+        spamwriter = csv.writer(open(interactfile, "w"), delimiter=';', quoting=csv.QUOTE_NONE, quotechar='"', escapechar='')
         fields = ["pathway","interact1_ensembl","interact2_ensembl"]
         spamwriter.writerow(fields)
         for row in interact:
@@ -50,11 +49,10 @@ def create_file_interact_ensembl(dict_corr):
                 l = [path, ens_i1, ens_i2]
                 spamwriter.writerow(l)
 
-
-def create_file_matrice_interact():
+def create_file_matrice_interact(matricefile, interactfile):
     dico_matrice = dict()
 
-    with open("p-interactions-ensembl.csv") as interactfile :
+    with open(interactfile) as interactfile :
         for row in interactfile:
             ligne = row.strip().split(";")
             path = ligne[0]
@@ -71,15 +69,11 @@ def create_file_matrice_interact():
                 # if i1 > i2: dico_matrice[path].append([i1, i2])
                 # else: dico_matrice[path].append([i2, i1])
     
-    spamwriter = csv.writer(open("p-matrice-interactions.csv", "w"), delimiter=';', quoting=csv.QUOTE_NONE, quotechar='"', escapechar='')
+    spamwriter = csv.writer(open(matricefile, "w"), delimiter=';', quoting=csv.QUOTE_NONE, quotechar='"', escapechar='')
     fields = dico_matrice.keys()
     spamwriter.writerow(fields)
 
     del(dico_matrice["pathway"])
-
-    #     fields = ["pathway","interact1_ensembl","interact2_ensembl"]
-    #     spamwriter.writerow(fields)
-
 
     for path1, list_i1 in dico_matrice.items():
         l = list()
@@ -104,9 +98,18 @@ def create_file_matrice_genes():
 
 
 if __name__ == "__main__" :
-    # recover_missing_ensembl_id(kegg_id="hsa:102724428")
-    # d_correspondance = get_corr_kegg_ENS()
-    # create_file_interact_ensembl(d_correspondance)
-    create_file_matrice_interact()
+    infile_biomart = "g-infos-biomart.csv"
+
+    infile_kegg = "p-min-interactions-kegg.csv"
+    outfile_ensembl = "p-min-interactions-ensembl.csv"
+    outfile_matrice = "p-min-matrice-interactions.csv"
+    # infile_kegg = "p-max-interactions-kegg.csv"
+    # outfile_ensembl = "p-max-interactions-ensemble.csv"
+    # outfile_matrice = "p-max-matrice-interactions.csv"
+
+
+    d_correspondance = get_corr_kegg_ENS(infile_biomart)
+    create_file_interact_ensembl(d_correspondance, infile_kegg, outfile_ensembl)
+    create_file_matrice_interact(outfile_matrice, outfile_ensembl)
 
 
