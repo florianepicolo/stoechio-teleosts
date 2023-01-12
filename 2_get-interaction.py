@@ -134,7 +134,7 @@ def loop_relation_min_interaction(filename):
         namepath = soup.find("pathway").get("title").split(" signaling")[0]
 
         for relation in soup.find_all("relation"):
-            
+
             entry1 = relation.get("entry1") # id de l'élément 1 de la relation
             entry2 = relation.get("entry2") # id de l'élément 2 de la relation
 
@@ -150,13 +150,11 @@ def loop_relation_min_interaction(filename):
                     if test_type(type1, type2) == 0:                                # SI PAS DE GROUPE !
                         relations.append([name1, name2])
                         relations.append([name2, name1])
-                        # print("c le zero")
                     elif test_type(type1, type2) == 1:                              # SI GROUPE POUR 1 !
                         for element1 in soup.find("entry", id=entry1).find_all("component"):
                             name1 = soup.find("entry", id=element1.get("id")).get("name")[0]
                             relations.append([name1, name2])
                             relations.append([name2, name1])
-
                     elif test_type(type1, type2) == 2:                              # SI GROUPE POUR 2 !
                         for element2 in soup.find("entry", id=entry2).find_all("component"):
                             name2 = soup.find("entry", id=element2.get("id")).get("name")[0]
@@ -186,7 +184,6 @@ def loop_relation_min_interaction(filename):
                             for element2 in soup.find("entry", id=entry2).find_all("component"):
                                 name2 = soup.find("entry", id=element2.get("id")).get("name")[0]
                                 relations.append([name1, name2])
-                # print(relations)
             except AttributeError or ImportError:
                 pass
     # supprimer les doublons
@@ -200,13 +197,13 @@ def linear(gene):
         return gene[0]
     return gene
 
-def write_csv_file(dict_relations):
-    spamwriter = csv.writer(open("p-interactions-kegg-test.csv", "w"), delimiter=';', quoting=csv.QUOTE_NONE, quotechar='"', escapechar='')
+def write_csv_file(dict_relations, interactkegg):
+    spamwriter = csv.writer(open(interactkegg, "w"), delimiter=';', quoting=csv.QUOTE_NONE, quotechar='"', escapechar='')
     fields = ["pathway","interact1_hsa","interact2_hsa"]
     spamwriter.writerow(fields)
     for pathname, relations in dict_relations.items():
         for r in relations:         # r est une liste
-            if "cpd" not in str(r) and "undefined" not in str(r): # on vire les cpd
+            if "cpd" not in str(r) and "undefined" not in str(r): # on vire les cpd et les undefined
                 r1 = linear(r[0])
                 r2 = linear(r[1])
                 lign = [pathname, r1, r2]
@@ -217,12 +214,13 @@ def write_csv_file(dict_relations):
 
 if __name__ == "__main__":   
 
+    outfile_interact = "p-min-interactions-kegg.csv"
+    # outfile_interact = "p-max-interactions-kegg.csv"
     dico_paths = dict()
 
     for f in glob.glob("paths/*"):
-        print(f)
-
-        # dico_relation, pathname = loop_relation_max_interaction(filename=f)
+    
+        dico_relation, pathname = loop_relation_max_interaction(filename=f)
         dico_relation, pathname = loop_relation_min_interaction(filename=f)
         dico_paths[pathname] = dico_relation
-    write_csv_file(dict_relations=dico_paths)
+    write_csv_file(dict_relations=dico_paths, interactkegg=outfile_interact)
