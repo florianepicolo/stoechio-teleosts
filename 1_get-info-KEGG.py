@@ -104,7 +104,7 @@ def extract_ensembl_id(gene_id):
 
 if __name__ == "__main__":   
     dico_info_gene = dict()
-    with open("p-infos-kegg-test.csv", "w", newline='') as csvfile:
+    with open("p-infos-kegg.csv", "w", newline='') as csvfile:
         spamwriter = csv.writer(csvfile, delimiter=';', quoting=csv.QUOTE_NONE, quotechar='', escapechar=' ')
         spamwriter.writerow(["name_pathway", "id_gene", "uniprot_gene", "ensembl_id", "name_gene", "descr_gene"])
         all_large_pathway = extract_id_pathway()
