@@ -4,7 +4,10 @@ g-infos-biomart.csv
 g-nbortho-teleosteens.csv
 g-paralogue-humangenes.txt
 p-infos-kegg.csv
-p-interactions-ensembl.csv
-p-interactions-kegg.csv
-p-matrice-interactions.csv
 p-stats-chi2-teleosteens.csv
+p-max-interactions-kegg.csv
+p-min-interactions-kegg.csv
+p-max-interactions-ensembl.csv
+p-min-interactions-ensembl.csv
+p-max-matrice-interactions.csv
+p-min-matrice-interactions.csv
