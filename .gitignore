@@ -1,6 +1,8 @@
 paths
 teleosteens
 pathbypath
+article
+figures
 g-infos-biomart.csv
 g-nbortho-teleosteens.csv
 g-paralogue-humangenes.txt
@@ -17,4 +19,7 @@ p-max-stats-chi2-teleosteens.csv
 p-max-stats-chi2-teleosteens.xlsx
 p-min-stats-chi2-teleosteens.csv
 p-min-stats-chi2-teleosteens.xlsx
+alamain-data-3WGD.csv
+alamain-data-4WGD.csv
+
 
