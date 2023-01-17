@@ -1,5 +1,6 @@
 paths
 teleosteens
+pathbypath
 g-infos-biomart.csv
 g-nbortho-teleosteens.csv
 g-paralogue-humangenes.txt
@@ -11,3 +12,9 @@ p-max-interactions-ensembl.csv
 p-min-interactions-ensembl.csv
 p-max-matrice-interactions.csv
 p-min-matrice-interactions.csv
+.Rhistory
+p-max-stats-chi2-teleosteens.csv
+p-max-stats-chi2-teleosteens.xlsx
+p-min-stats-chi2-teleosteens.csv
+p-min-stats-chi2-teleosteens.xlsx
+
