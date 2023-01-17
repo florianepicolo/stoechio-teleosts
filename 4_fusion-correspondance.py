@@ -100,12 +100,12 @@ def create_file_matrice_genes():
 if __name__ == "__main__" :
     infile_biomart = "g-infos-biomart.csv"
 
-    infile_kegg = "p-min-interactions-kegg.csv"
-    outfile_ensembl = "p-min-interactions-ensembl.csv"
-    outfile_matrice = "p-min-matrice-interactions.csv"
-    # infile_kegg = "p-max-interactions-kegg.csv"
-    # outfile_ensembl = "p-max-interactions-ensemble.csv"
-    # outfile_matrice = "p-max-matrice-interactions.csv"
+    # infile_kegg = "p-min-interactions-kegg.csv"
+    # outfile_ensembl = "p-min-interactions-ensembl.csv"
+    # outfile_matrice = "p-min-matrice-interactions.csv"
+    infile_kegg = "p-max-interactions-kegg.csv"
+    outfile_ensembl = "p-max-interactions-ensemble.csv"
+    outfile_matrice = "p-max-matrice-interactions.csv"
 
 
     d_correspondance = get_corr_kegg_ENS(infile_biomart)
