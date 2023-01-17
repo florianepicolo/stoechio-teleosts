@@ -89,9 +89,11 @@ if __name__ == "__main__":
     path_fish = "teleosteens/"
     file_wholegenomehuman = "g-infos-biomart.csv"
     # file_pathwayhuman = "p-infos-kegg.csv"
-    file_pathwayhuman = "p-interactions-ensembl.csv"
+    # file_pathwayhuman = "p-min-interactions-ensembl.csv"
+    file_pathwayhuman = "p-max-interactions-ensembl.csv"
     outfile_nbortho = "g-nbortho-teleosteens.csv"
-    outfile_chi2 = "p-stats-chi2-teleosteens.csv"
+    # outfile_chi2 = "p-min-stats-chi2-teleosteens.csv"
+    outfile_chi2 = "p-max-stats-chi2-teleosteens.csv"
     ordrespecie = ["European_seabass","Large_yellow_croaker","Gilthead_seabream","Lumpfish","Stickleback","Channel_bull_blenny","Pike-perch","Ballan_wrasse","Fugu","Tetraodon","Climbing_perch","Siamese_fighting_fish","Zig-zag_eel","Barramundi_perch","Greater_amberjack","Yellowtail_amberjack","Tongue_sole","Turbot","Chinese_medaka","Japanese_medaka_HdrR","Indian_medaka","Javanese_ricefish","Turquoise_killifish","Mangrove_rivulus","Sheepshead_minnow","Mummichog","Amazon_molly","Sailfin_molly","Guppy","Platyfish","Eastern_happy","Zebra_mbuna","Makobe_Island_cichlid","Burton's_mouthbrooder","Lyretail_cichlid","Nile_tilapia","Midas_cichlid","Spiny_chromis","Clown_anemonefish","Orange_clownfish","Bicolor_damselfish","Tiger_tail_seahorse","Pinecone_soldierfish","Atlantic_cod","Northern_pike","Huchen","Chinook_salmon","Coho_salmon","Rainbow_trout","Atlantic_salmon","Brown_trout","Atlantic_herring","Denticle_herring","Mexican_tetra","Red-bellied_piranha","Electric_eel","Channel_catfish","Goldfish","Common_carp","Golden-line_barbel","Zebrafish","Paramormyrops_kingsleyae","Asian_bonytongue"]
 
     list_wholehumangene = create_human_list(file_wholegenomehuman, 0, "\t")
